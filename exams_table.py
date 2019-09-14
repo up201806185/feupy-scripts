@@ -58,7 +58,7 @@ else: # We need to do some filtering
     for exam in exams:
         uc = exam["curricular unit"]
 
-        if uc.academic_year in years or uc.acronym in ucs_acronyms:
+        if uc.curricular_year in years or uc.acronym in ucs_acronyms:
             filtered_exams.append(exam)
 
 
