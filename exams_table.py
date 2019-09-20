@@ -14,6 +14,16 @@ COURSES_IDS = {
     "MIEQ"   : 745
 }
 
+WEEKDAYS = (
+    'Monday',
+    'Tuesday',
+    'Wednesday',
+    'Thursday',
+    'Friday',
+    'Saturday',
+    'Sunday'
+)
+
 doc = """A FEUP exams displaying utility.
 
 Usage:
@@ -61,16 +71,27 @@ else: # We need to do some filtering
         if uc.curricular_year in years or uc.acronym in ucs_acronyms:
             filtered_exams.append(exam)
 
-
-for exam in filtered_exams:
-    exam["curricular unit"] = exam["curricular unit"].acronym
-
-    if exam["rooms"] != None:
-        exam["rooms"] = " ".join(exam["rooms"])
-
-    exam.pop("season")
-    exam.pop("observations")
-
 filtered_exams.sort(key = lambda item: item["start"]) # sort chronologically
 
-print(tabulate.tabulate(filtered_exams, headers = "keys"))
+exams_display = []
+
+for exam in filtered_exams:
+    name = exam["curricular unit"].acronym
+
+    day = exam["start"].date()
+    weekday = WEEKDAYS[day.weekday()]
+
+    start  = str(exam["start"].time())[:5]
+    finish = str(exam["finish"].time())[:5]
+
+
+    if exam["rooms"] != None:
+        rooms = " ".join(exam["rooms"])
+    else:
+        rooms = None
+
+    exams_display.append(
+        [name, day, weekday, start, finish, rooms]
+    )
+
+print(tabulate.tabulate(exams_display, headers = ["name", "day", "weekday", "start", "finish", "rooms"]))
